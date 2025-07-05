@@ -13076,3 +13076,29 @@ body.menu-open {
     margin-top: 45rem;
   }
 }
+@media (max-width: 560px) {
+  .section-equality {
+    top: 60rem;
+  }
+  .section-social[data-astro-cid-232lwzcd] {
+    margin-top: 60em;
+  }
+}
+@media (max-width: 380px) {
+  .section-equality {
+    top: 80rem;
+  }
+  .section-social[data-astro-cid-232lwzcd] {
+    margin-top: 80em;
+  }
+}
+.content-item {
+  display: none;
+}
+.content-item.active {
+  display: block;
+}
+
+.navigation-item.active {
+  border-bottom: 2px solid white; /* or any style you want */
+}
