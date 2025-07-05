@@ -69,48 +69,59 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
-
 gsap.registerPlugin(ScrollTrigger);
 
-const totalFrames = 710;
-const scene1Img = document.getElementById("scene1-frame");
+const canvas = document.getElementById("scene1-canvas");
+const context = canvas.getContext("2d");
 
-const getFramePath = (index) =>
+const frameCount = 710;
+const currentFrame = (index) =>
   `/frames/scene1/scene${String(index).padStart(5, "0")}.webp`;
 
-// 🧠 Only preload the first 20 frames for faster startup
-for (let i = 1; i <= 710; i++) {
+const images = [];
+let loadedCount = 0;
+let canvasSet = false;
+
+// Preload images
+for (let i = 0; i < frameCount; i++) {
   const img = new Image();
-  img.src = getFramePath(i);
+  img.src = currentFrame(i + 1);
+  images.push(img);
+  img.onload = () => {
+    loadedCount++;
+    if (!canvasSet && img.width && img.height) {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      canvasSet = true;
+      drawImage(0);
+    }
+  };
 }
 
-// 🧠 Use requestAnimationFrame and throttle updates
-let lastFrameIndex = -1;
-
-function updateFrame(frameIndex) {
-  if (frameIndex !== lastFrameIndex) {
-    scene1Img.src = getFramePath(frameIndex);
-    lastFrameIndex = frameIndex;
-  }
+function drawImage(index) {
+  const img = images[index];
+  if (!img || !img.complete) return;
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.drawImage(img, 0, 0, canvas.width, canvas.height);
 }
 
 gsap.to(
-  { frame: 1 },
+  { frame: 0 },
   {
-    frame: totalFrames,
+    frame: frameCount - 1,
+    snap: "frame",
     ease: "none",
     scrollTrigger: {
       trigger: "#scene1",
-      scrub: true,
       start: "top top",
       endTrigger: "footer",
       end: "top bottom",
+      scrub: true,
       pin: true,
-      anticipatePin: 1,
     },
     onUpdate: function () {
       const frameIndex = Math.round(this.targets()[0].frame);
-      requestAnimationFrame(() => updateFrame(frameIndex));
+      drawImage(frameIndex);
     },
   }
 );

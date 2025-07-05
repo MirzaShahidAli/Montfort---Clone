@@ -54,8 +54,11 @@
 <body class="loaded">
 	<!-- Scene 1 -->
 	<section class="panel" id="scene1">
-		<img id="scene1-frame" class="full-frame" />
+		<canvas id="scene1-canvas" class="full-frame"></canvas>
 	</section>
+
+
+
 	<div data-astro-transition-persist="cursor" class="cursor" data-component="Cursor" data-astro-cid-x6vourwi=""
 		style="transform: translate3d(0px, 0px, 0px) rotate(0deg) scale(1);">
 		<div class="inner" data-astro-cid-x6vourwi="">
@@ -1864,7 +1867,7 @@
 			});
 		});
 	</script>
-	<script>
+	<!-- <script>
 		gsap.registerPlugin(ScrollToPlugin);
 
 		let scrollTarget = window.scrollY;
@@ -1902,7 +1905,7 @@
 				animateScroll();
 			}
 		}, { passive: false });
-	</script>
+	</script> -->
 
 
 
