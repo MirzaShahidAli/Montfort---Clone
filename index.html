@@ -81,11 +81,11 @@
 						<li data-astro-cid-4wsjtibl=""> <a href="/trading/" data-astro-cid-4wsjtibl="true"
 								class="nav-link"> <span data-astro-cid-4wsjtibl="">Montfort Trading</span> </a> </li>
 						<li data-astro-cid-4wsjtibl=""> <a href="/capital/" data-astro-cid-4wsjtibl="true"
-								class="nav-link"> <span data-astro-cid-4wsjtibl="">Change 2</span> </a> </li>
+								class="nav-link"> <span data-astro-cid-4wsjtibl="">Montfort Capital</span> </a> </li>
 						<li data-astro-cid-4wsjtibl=""> <a href="/maritime/" data-astro-cid-4wsjtibl="true"
 								class="nav-link"> <span data-astro-cid-4wsjtibl="">Montfort Maritime</span> </a> </li>
 						<li data-astro-cid-4wsjtibl=""> <a href="/fort-energy/" data-astro-cid-4wsjtibl="true"
-								class="nav-link"> <span data-astro-cid-4wsjtibl="">Change 1:</span> </a> </li>
+								class="nav-link"> <span data-astro-cid-4wsjtibl="">Fort Energy</span> </a> </li>
 					</ul>
 					<div class="navbar" data-astro-cid-4wsjtibl=""
 						style="opacity: 1; translate: none; rotate: none; scale: none; transform: translate3d(48px, 0px, 0px) scale(0.1457, 1);">
@@ -1867,45 +1867,56 @@
 			});
 		});
 	</script>
-	<!-- <script>
+	<script>
 		gsap.registerPlugin(ScrollToPlugin);
 
 		let scrollTarget = window.scrollY;
 		let isAnimating = false;
 
+		// ✅ Sync scrollTarget always
+		const syncTarget = () => {
+			if (!isAnimating) {
+				scrollTarget = window.scrollY;
+			}
+		};
+
+		// ✅ Update scrollTarget and animate
 		window.addEventListener("wheel", function (e) {
 			e.preventDefault();
 
-			// ✅ Always sync scrollTarget with actual scroll position
-			scrollTarget = window.scrollY + (e.deltaY * 2.5);
+			const boost = e.deltaY * 1;
+			scrollTarget += boost;
 
-			// ✅ Clamp to document bounds
 			scrollTarget = Math.max(0, Math.min(scrollTarget, document.body.scrollHeight - window.innerHeight));
 
-			// ✅ Animate smoothly
 			if (!isAnimating) {
 				isAnimating = true;
-
-				function animateScroll() {
-					gsap.to(window, {
-						scrollTo: scrollTarget,
-						duration: 0.1,
-						ease: "power2.out",
-						onComplete: () => {
-							// If scrollTarget changed during animation, keep going
-							if (Math.abs(scrollTarget - window.scrollY) > 1) {
-								animateScroll();
-							} else {
-								isAnimating = false;
-							}
-						}
-					});
-				}
-
 				animateScroll();
 			}
 		}, { passive: false });
-	</script> -->
+
+		// ✅ Handle scrollbar dragging & touch scroll
+		["scroll", "mousedown", "mouseup", "touchstart", "touchend"].forEach(evt =>
+			window.addEventListener(evt, syncTarget)
+		);
+
+		function animateScroll() {
+			gsap.to(window, {
+				scrollTo: scrollTarget,
+				duration: 0.1,
+				ease: "power2.out",
+				onUpdate: syncTarget,
+				onComplete: () => {
+					if (Math.abs(scrollTarget - window.scrollY) > 2) {
+						animateScroll(); // continue animation
+					} else {
+						isAnimating = false;
+					}
+				}
+			});
+		}
+	</script>
+
 
 
 
