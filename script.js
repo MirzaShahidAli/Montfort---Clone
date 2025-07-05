@@ -79,7 +79,7 @@ const getFramePath = (index) =>
   `/frames/scene1/scene${String(index).padStart(5, "0")}.webp`;
 
 // 🧠 Only preload the first 20 frames for faster startup
-for (let i = 1; i <= 20; i++) {
+for (let i = 1; i <= 710; i++) {
   const img = new Image();
   img.src = getFramePath(i);
 }
