@@ -76,7 +76,7 @@ const totalFrames = 710; // 🔁 Update this to match your actual frame count
 const scene1Img = document.getElementById("scene1-frame");
 
 const getFramePath = (index) =>
-  `/frames/scene1/scene${String(index).padStart(5, "0")}.jpg`;
+  `/frames/scene1/scene${String(index).padStart(5, "0")}.webp`;
 
 for (let i = 1; i <= totalFrames; i++) {
   const img = new Image();
