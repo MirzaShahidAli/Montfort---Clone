@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (Math.abs(currentScroll - lastScroll) < 5) return;
 
     if (currentScroll > lastScroll) {
-      // Scrolling down: hide header
       header.classList.add("fade");
       header.classList.remove("top");
     } else {
@@ -21,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     lastScroll = currentScroll;
   });
 });
+
 document.addEventListener("DOMContentLoaded", () => {
   const cursor = document.querySelector(".cursor");
 
@@ -55,6 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   animateCursor();
 });
+
 document.addEventListener("DOMContentLoaded", () => {
   const layers = document.querySelectorAll(".parallax.layer");
 
@@ -71,17 +72,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
 gsap.registerPlugin(ScrollTrigger);
 
-const totalFrames = 710; // 🔁 Update this to match your actual frame count
-
+const totalFrames = 710;
 const scene1Img = document.getElementById("scene1-frame");
 
 const getFramePath = (index) =>
   `/frames/scene1/scene${String(index).padStart(5, "0")}.webp`;
 
-for (let i = 1; i <= totalFrames; i++) {
+// 🧠 Only preload the first 20 frames for faster startup
+for (let i = 1; i <= 20; i++) {
   const img = new Image();
   img.src = getFramePath(i);
 }
+
+// 🧠 Use requestAnimationFrame and throttle updates
+let lastFrameIndex = -1;
+
+function updateFrame(frameIndex) {
+  if (frameIndex !== lastFrameIndex) {
+    scene1Img.src = getFramePath(frameIndex);
+    lastFrameIndex = frameIndex;
+  }
+}
+
 gsap.to(
   { frame: 1 },
   {
@@ -91,20 +103,21 @@ gsap.to(
       trigger: "#scene1",
       scrub: true,
       start: "top top",
-      endTrigger: "footer", // 👈 Stops when footer hits start
-      end: "top bottom", // 👈 End when top of footer hits bottom of viewport
+      endTrigger: "footer",
+      end: "top bottom",
       pin: true,
       anticipatePin: 1,
     },
     onUpdate: function () {
       const frameIndex = Math.round(this.targets()[0].frame);
-      scene1Img.src = getFramePath(frameIndex);
+      requestAnimationFrame(() => updateFrame(frameIndex));
     },
   }
 );
 
-const lenis = new Lenis({
-  duration: 1.5,
-  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // similar to Mont-Fort
-  smooth: true,
-});
+// // ✅ Lenis (unchanged)
+// const lenis = new Lenis({
+//   duration: 1.5,
+//   easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+//   smooth: true,
+// });

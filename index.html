@@ -10,6 +10,10 @@
 	<link rel="stylesheet" href="_slug_.B97dlsMJ.css">
 	<!-- GSAP + ScrollTrigger -->
 	<script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+	<!-- GSAP + ScrollToPlugin (CDN) -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+
 	<script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
 	<style>
 		[data-astro-transition-scope="astro-smooz4hq-1"] {
@@ -1860,6 +1864,48 @@
 			});
 		});
 	</script>
+	<script>
+		gsap.registerPlugin(ScrollToPlugin);
+
+		let scrollTarget = window.scrollY;
+		let isAnimating = false;
+
+		window.addEventListener("wheel", function (e) {
+			e.preventDefault();
+
+			// ✅ Always sync scrollTarget with actual scroll position
+			scrollTarget = window.scrollY + (e.deltaY * 2.5);
+
+			// ✅ Clamp to document bounds
+			scrollTarget = Math.max(0, Math.min(scrollTarget, document.body.scrollHeight - window.innerHeight));
+
+			// ✅ Animate smoothly
+			if (!isAnimating) {
+				isAnimating = true;
+
+				function animateScroll() {
+					gsap.to(window, {
+						scrollTo: scrollTarget,
+						duration: 0.1,
+						ease: "power2.out",
+						onComplete: () => {
+							// If scrollTarget changed during animation, keep going
+							if (Math.abs(scrollTarget - window.scrollY) > 1) {
+								animateScroll();
+							} else {
+								isAnimating = false;
+							}
+						}
+					});
+				}
+
+				animateScroll();
+			}
+		}, { passive: false });
+	</script>
+
+
+
 </body>
 
 </html>

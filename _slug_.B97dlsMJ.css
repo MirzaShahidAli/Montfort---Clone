@@ -13102,3 +13102,11 @@ body.menu-open {
 .navigation-item.active {
   border-bottom: 2px solid white; /* or any style you want */
 }
+html {
+  scroll-behavior: smooth;
+}
+.full-frame {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
