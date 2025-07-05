@@ -82,7 +82,6 @@ for (let i = 1; i <= totalFrames; i++) {
   const img = new Image();
   img.src = getFramePath(i);
 }
-
 gsap.to(
   { frame: 1 },
   {
@@ -92,7 +91,8 @@ gsap.to(
       trigger: "#scene1",
       scrub: true,
       start: "top top",
-      end: `+=${totalFrames * 20}px`,
+      endTrigger: "footer", // 👈 Stops when footer hits start
+      end: "top bottom", // 👈 End when top of footer hits bottom of viewport
       pin: true,
       anticipatePin: 1,
     },
@@ -102,6 +102,7 @@ gsap.to(
     },
   }
 );
+
 const lenis = new Lenis({
   duration: 1.5,
   easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // similar to Mont-Fort
