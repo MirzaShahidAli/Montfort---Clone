@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const header = document.querySelector("header[data-astro-cid-4wsjtibl]");
+  const header = document.querySelector("header ");
   if (!header) return;
 
   let lastScroll = window.scrollY;
@@ -76,7 +76,7 @@ const context = canvas.getContext("2d");
 
 const frameCount = 710;
 const currentFrame = (index) =>
-  `/frames/scene1/scene${String(index).padStart(5, "0")}.webp`;
+  `frames/scene1/scene${String(index).padStart(5, "0")}.webp`;
 
 const images = [];
 let loadedCount = 0;
